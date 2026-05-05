@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback } from 'react'
 import { getAllTasks } from '@/lib/db/tasks'
 import KanbanBoard from '@/components/board/KanbanBoard'
 import QuickAddBar from '@/components/board/QuickAddBar'
+import TaskDetail from '@/components/task/TaskDetail'
 import type { Task } from '@/types/task'
 
 export default function BoardPage() {
@@ -27,9 +28,14 @@ export default function BoardPage() {
       <QuickAddBar onTaskCreated={refresh} />
       <KanbanBoard tasks={tasks} onTasksChange={refresh} onTaskClick={setSelectedTask} />
       {selectedTask && (
-        <div className="text-white/40 text-sm p-2">
-          Selected: {selectedTask.title} (TaskDetail coming in Task 16)
-        </div>
+        <TaskDetail
+          task={selectedTask}
+          onClose={() => setSelectedTask(null)}
+          onUpdated={async () => {
+            await refresh()
+            setSelectedTask(null)
+          }}
+        />
       )}
     </div>
   )
