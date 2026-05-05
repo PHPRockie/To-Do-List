@@ -18,6 +18,7 @@ export interface Task {
   subtasks: Subtask[]
   estimatedMinutes?: number
   reminderOffset?: number
+  completedAt?: string
   createdAt: string
   updatedAt: string
 }
