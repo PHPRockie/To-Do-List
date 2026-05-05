@@ -5,4 +5,6 @@ export interface Settings {
   breakDuration: number
   streak: number
   lastActiveDate: string
+  supabaseUserId?: string
+  lastSyncedAt?: string
 }

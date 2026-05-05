@@ -7,6 +7,8 @@ const DEFAULTS: Settings = {
   breakDuration: 5,
   streak: 0,
   lastActiveDate: '',
+  supabaseUserId: undefined,
+  lastSyncedAt: undefined,
 }
 
 export async function getSetting<K extends keyof Settings>(key: K): Promise<Settings[K]> {
