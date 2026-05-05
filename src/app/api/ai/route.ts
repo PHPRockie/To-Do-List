@@ -1,6 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server'
 import Anthropic from '@anthropic-ai/sdk'
-import { buildParseSystemPrompt, buildBreakdownSystemPrompt } from '@/lib/ai/prompts'
+import {
+  buildParseSystemPrompt,
+  buildBreakdownSystemPrompt,
+  buildScheduleSystemPrompt,
+  buildPrioritizeSystemPrompt,
+  buildWeeklySummarySystemPrompt,
+} from '@/lib/ai/prompts'
 import type { AIRequest } from '@/types/ai'
 
 export async function POST(req: NextRequest) {
@@ -44,6 +50,42 @@ export async function POST(req: NextRequest) {
         messages: [{ role: 'user', content: input }],
       })
       const text = message.content[0].type === 'text' ? message.content[0].text : '[]'
+      const result = JSON.parse(text)
+      return NextResponse.json({ action, result })
+    }
+
+    if (action === 'schedule') {
+      const message = await client.messages.create({
+        model: 'claude-haiku-4-5-20251001',
+        max_tokens: 512,
+        system: buildScheduleSystemPrompt(),
+        messages: [{ role: 'user', content: input }],
+      })
+      const text = message.content[0].type === 'text' ? message.content[0].text : '[]'
+      const result = JSON.parse(text)
+      return NextResponse.json({ action, result })
+    }
+
+    if (action === 'prioritize') {
+      const message = await client.messages.create({
+        model: 'claude-haiku-4-5-20251001',
+        max_tokens: 256,
+        system: buildPrioritizeSystemPrompt(),
+        messages: [{ role: 'user', content: input }],
+      })
+      const text = message.content[0].type === 'text' ? message.content[0].text : '{"insight":""}'
+      const result = JSON.parse(text)
+      return NextResponse.json({ action, result })
+    }
+
+    if (action === 'weekly_summary') {
+      const message = await client.messages.create({
+        model: 'claude-sonnet-4-6',
+        max_tokens: 512,
+        system: buildWeeklySummarySystemPrompt(),
+        messages: [{ role: 'user', content: input }],
+      })
+      const text = message.content[0].type === 'text' ? message.content[0].text : '{"summary":""}'
       const result = JSON.parse(text)
       return NextResponse.json({ action, result })
     }
