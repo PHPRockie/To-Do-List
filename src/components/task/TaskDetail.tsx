@@ -1,11 +1,12 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import type { Task, TaskPriority } from '@/types/task'
 import { updateTask, deleteTask } from '@/lib/db/tasks'
 import GlassCard from '@/components/ui/GlassCard'
 import SubtaskList from './SubtaskList'
+import { callBreakdownAI, hasApiKey } from '@/lib/ai/client'
 
 interface TaskDetailProps {
   task: Task
@@ -19,11 +20,32 @@ export default function TaskDetail({ task, onClose, onUpdated }: TaskDetailProps
   const [dueDate, setDueDate] = useState(task.dueDate ?? '')
   const [subtasks, setSubtasks] = useState(task.subtasks)
   const [saving, setSaving] = useState(false)
+  const [breakingDown, setBreakingDown] = useState(false)
+  const [aiEnabled, setAiEnabled] = useState(false)
+
+  useEffect(() => {
+    hasApiKey().then(setAiEnabled)
+  }, [])
 
   function toggleSubtask(id: string) {
     setSubtasks(prev =>
       prev.map(s => (s.id === id ? { ...s, done: !s.done } : s))
     )
+  }
+
+  async function handleBreakdown() {
+    setBreakingDown(true)
+    try {
+      const titles = await callBreakdownAI(task.title)
+      const newSubtasks = titles.map(title => ({
+        id: crypto.randomUUID(),
+        title,
+        done: false,
+      }))
+      setSubtasks(prev => [...prev, ...newSubtasks])
+    } finally {
+      setBreakingDown(false)
+    }
   }
 
   async function handleSave() {
@@ -98,6 +120,16 @@ export default function TaskDetail({ task, onClose, onUpdated }: TaskDetailProps
                 <p className="text-xs text-white/40 uppercase tracking-wider mb-2">Subtasks</p>
                 <SubtaskList subtasks={subtasks} onToggle={toggleSubtask} />
               </div>
+            )}
+
+            {aiEnabled && (
+              <button
+                onClick={handleBreakdown}
+                disabled={breakingDown}
+                className="w-full glass glass-hover rounded-lg py-2 text-xs text-purple-400/80 hover:text-purple-400 transition-colors disabled:opacity-40"
+              >
+                {breakingDown ? '✨ Breaking down...' : '✨ AI: Break into subtasks'}
+              </button>
             )}
 
             <div className="flex justify-between pt-2">
