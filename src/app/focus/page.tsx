@@ -1,9 +1,11 @@
+import FocusTimer from '@/components/focus/FocusTimer'
+
 export default function FocusPage() {
   return (
-    <div className="p-6 flex flex-col items-center justify-center min-h-[60vh]">
-      <div className="text-6xl mb-4">⏱</div>
-      <h1 className="text-2xl font-bold text-white/80">Focus Mode</h1>
-      <p className="text-white/40 mt-2">Pomodoro timer — coming in Phase 2.</p>
+    <div className="flex flex-col items-center justify-center min-h-[80vh] p-6">
+      <h1 className="text-xl font-semibold text-white/80 mb-2">Focus</h1>
+      <p className="text-sm text-white/40 mb-8">Set a duration and start your session.</p>
+      <FocusTimer />
     </div>
   )
 }
