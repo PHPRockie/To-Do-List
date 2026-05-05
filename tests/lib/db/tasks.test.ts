@@ -61,6 +61,21 @@ describe('updateTask', () => {
   it('throws if task does not exist', async () => {
     await expect(updateTask('ghost', { status: 'done' })).rejects.toThrow()
   })
+
+  it('sets completedAt when status changes to done', async () => {
+    await createTask(sample)
+    await updateTask('task-1', { status: 'done' })
+    const updated = await getTask('task-1')
+    expect(updated?.completedAt).toBeTruthy()
+    expect(updated?.status).toBe('done')
+  })
+
+  it('does not set completedAt when status changes to inprogress', async () => {
+    await createTask(sample)
+    await updateTask('task-1', { status: 'inprogress' })
+    const updated = await getTask('task-1')
+    expect(updated?.completedAt).toBeUndefined()
+  })
 })
 
 describe('deleteTask', () => {

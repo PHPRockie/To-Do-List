@@ -20,7 +20,20 @@ export async function updateTask(id: string, updates: Partial<Task>): Promise<vo
   const db = await getDB()
   const existing = await db.get('tasks', id)
   if (!existing) throw new Error(`Task ${id} not found`)
-  await db.put('tasks', { ...existing, ...updates, updatedAt: new Date().toISOString() })
+  const completedAt =
+    updates.status === 'done' && existing.status !== 'done'
+      ? new Date().toISOString()
+      : existing.completedAt
+  await db.put('tasks', {
+    ...existing,
+    ...updates,
+    completedAt,
+    updatedAt: new Date().toISOString(),
+  })
+  if (updates.status === 'done' && existing.status !== 'done') {
+    const { updateStreak } = await import('./streak')
+    await updateStreak()
+  }
 }
 
 export async function deleteTask(id: string): Promise<void> {
