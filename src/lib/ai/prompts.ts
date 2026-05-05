@@ -42,3 +42,43 @@ Example:
 Input: "launch my app"
 Output: ["Set up production environment","Write launch announcement","Create landing page","Submit to Product Hunt","Monitor error logs post-launch"]`
 }
+
+export function buildScheduleSystemPrompt(): string {
+  return `You are a productivity scheduler. Given a list of tasks with due dates and priorities, suggest the best time slot today for each task.
+Always respond with a valid JSON array only — no prose, no markdown, no code fences.
+
+Output format: [{"taskId":"string","taskTitle":"string","suggestedTime":"H:MMam","reason":"string"}]
+
+Rules:
+- Schedule between 8:00am and 6:00pm
+- Earlier due dates get earlier slots
+- High priority tasks get morning slots when possible
+- Each task gets a unique time slot at least 1 hour apart
+- Keep reason under 50 characters
+- Sort output by suggestedTime ascending`
+}
+
+export function buildPrioritizeSystemPrompt(): string {
+  return `You are a productivity coach. Given today's open tasks, write one short actionable insight.
+Always respond with valid JSON only — no prose, no markdown, no code fences.
+
+Output format: {"insight":"string"}
+
+Rules:
+- Maximum 120 characters
+- Mention the most critical task by name
+- Be specific and encouraging`
+}
+
+export function buildWeeklySummarySystemPrompt(): string {
+  return `You are a productivity coach writing a weekly review summary.
+Always respond with valid JSON only — no prose, no markdown, no code fences.
+
+Output format: {"summary":"string"}
+
+Rules:
+- 2-3 sentences maximum
+- Mention a specific achievement or stat
+- If tasks remain open, encourage the user to tackle them next week
+- Be warm and motivating`
+}
