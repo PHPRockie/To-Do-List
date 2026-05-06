@@ -1,6 +1,6 @@
 {
-  "name": "FlowTask",
-  "short_name": "FlowTask",
+  "name": "To Do List App",
+  "short_name": "To Do List",
   "description": "AI-powered personal task manager",
   "start_url": "/board",
   "display": "standalone",

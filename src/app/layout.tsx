@@ -4,7 +4,7 @@ import AppShell from '@/components/layout/AppShell'
 import { AuthProvider } from '@/context/AuthContext'
 
 export const metadata: Metadata = {
-  title: 'FlowTask',
+  title: 'To Do List App',
   description: 'AI-powered personal task manager',
   manifest: '/manifest.json',
 }
