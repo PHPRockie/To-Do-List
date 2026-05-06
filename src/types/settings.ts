@@ -7,4 +7,7 @@ export interface Settings {
   lastActiveDate: string
   supabaseUserId?: string
   lastSyncedAt?: string
+  notificationsEnabled: boolean
+  lastBriefingDate: string
+  lastBriefingText: string
 }

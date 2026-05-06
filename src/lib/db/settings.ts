@@ -9,6 +9,9 @@ const DEFAULTS: Settings = {
   lastActiveDate: '',
   supabaseUserId: undefined,
   lastSyncedAt: undefined,
+  notificationsEnabled: false,
+  lastBriefingDate: '',
+  lastBriefingText: '',
 }
 
 export async function getSetting<K extends keyof Settings>(key: K): Promise<Settings[K]> {
