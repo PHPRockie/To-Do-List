@@ -67,8 +67,7 @@ describe('useDailyBriefing', () => {
 
     const { result } = renderHook(() => useDailyBriefing())
 
-    // wait for effect to run
-    await new Promise(r => setTimeout(r, 50))
+    await waitFor(() => expect(getSetting).toHaveBeenCalled())
 
     expect(callBriefingAI).not.toHaveBeenCalled()
     expect(result.current).toBeNull()
@@ -80,7 +79,7 @@ describe('useDailyBriefing', () => {
 
     const { result } = renderHook(() => useDailyBriefing())
 
-    await new Promise(r => setTimeout(r, 50))
+    await waitFor(() => expect(callBriefingAI).toHaveBeenCalled())
 
     expect(result.current).toBeNull()
   })

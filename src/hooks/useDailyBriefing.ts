@@ -33,7 +33,6 @@ export function useDailyBriefing(): string | null {
           .map(t => t.title)
 
         const text = await callBriefingAI(todayTasks, recentDone)
-        if (!text) return
 
         await setSetting('lastBriefingDate', today)
         await setSetting('lastBriefingText', text)
