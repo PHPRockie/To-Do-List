@@ -12,6 +12,7 @@ export function useNotifications() {
 
     async function requestPermission() {
       const permission = await Notification.requestPermission()
+      // persisted for a future settings UI toggle (not yet read by tick)
       await setSetting('notificationsEnabled', permission === 'granted')
     }
 
