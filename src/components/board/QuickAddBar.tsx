@@ -19,7 +19,7 @@ export default function QuickAddBar({ onTaskCreated }: QuickAddBarProps) {
     hasApiKey().then(setAiEnabled)
   }, [])
 
-  async function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.SubmitEvent) {
     e.preventDefault()
     const text = value.trim()
     if (!text) return

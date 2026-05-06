@@ -18,7 +18,7 @@ export default function AuthModal({ onClose }: AuthModalProps) {
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
 
-  async function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.SubmitEvent) {
     e.preventDefault()
     setError(null)
 
@@ -54,7 +54,7 @@ export default function AuthModal({ onClose }: AuthModalProps) {
       <GlassCard className="p-6 w-full max-w-sm" onClick={e => e.stopPropagation()}>
         <div className="text-center mb-5">
           <div className="w-10 h-10 rounded-xl gradient-bg mx-auto mb-3" />
-          <h2 className="text-base font-semibold text-white/90">Sign in to To Do List App</h2>
+          <h2 className="text-base font-semibold text-white/90">Sign in to FlowTask</h2>
           <p className="text-xs text-white/40 mt-1">Sync your tasks across devices</p>
         </div>
 
