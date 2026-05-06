@@ -1,4 +1,4 @@
-export type AIAction = 'parse' | 'breakdown' | 'schedule' | 'prioritize' | 'weekly_summary'
+export type AIAction = 'parse' | 'breakdown' | 'schedule' | 'prioritize' | 'weekly_summary' | 'briefing'
 
 export interface ParseResult {
   title: string

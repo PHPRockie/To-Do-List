@@ -6,6 +6,7 @@ import {
   buildScheduleSystemPrompt,
   buildPrioritizeSystemPrompt,
   buildWeeklySummarySystemPrompt,
+  buildBriefingSystemPrompt,
 } from '@/lib/ai/prompts'
 import type { AIRequest } from '@/types/ai'
 
@@ -87,6 +88,17 @@ export async function POST(req: NextRequest) {
       })
       const text = message.content[0].type === 'text' ? message.content[0].text : '{"summary":""}'
       const result = JSON.parse(text)
+      return NextResponse.json({ action, result })
+    }
+
+    if (action === 'briefing') {
+      const message = await client.messages.create({
+        model: 'claude-haiku-4-5-20251001',
+        max_tokens: 256,
+        system: buildBriefingSystemPrompt(),
+        messages: [{ role: 'user', content: input }],
+      })
+      const result = message.content[0].type === 'text' ? message.content[0].text : ''
       return NextResponse.json({ action, result })
     }
 

@@ -81,3 +81,26 @@ export async function callWeeklySummaryAI(input: import('@/types/stats').WeeklyS
   if (!res.ok) { const err = await res.json(); throw new Error(err.error ?? 'AI call failed') }
   return (await res.json()).result
 }
+
+export async function callBriefingAI(
+  todayTasks: string[],
+  recentDone: string[]
+): Promise<string> {
+  const apiKey = await getSetting('claudeApiKey')
+  if (!apiKey) throw new Error('NO_API_KEY')
+
+  const input = JSON.stringify({ todayTasks, recentDone })
+  const res = await fetch('/api/ai', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ action: 'briefing', apiKey, input }),
+  })
+
+  if (!res.ok) {
+    const err = await res.json()
+    throw new Error(err.error ?? 'AI call failed')
+  }
+
+  const data = await res.json()
+  return data.result as string
+}
