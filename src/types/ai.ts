@@ -16,5 +16,5 @@ export interface AIRequest {
 
 export interface AIResponse {
   action: AIAction
-  result: ParseResult | string[]
+  result: ParseResult | string[] | string
 }
