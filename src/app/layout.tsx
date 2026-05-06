@@ -2,9 +2,10 @@ import type { Metadata, Viewport } from 'next'
 import './globals.css'
 import AppShell from '@/components/layout/AppShell'
 import { AuthProvider } from '@/context/AuthContext'
+import NotificationsInit from '@/components/layout/NotificationsInit'
 
 export const metadata: Metadata = {
-  title: 'To Do List App',
+  title: 'FlowTask',
   description: 'AI-powered personal task manager',
   manifest: '/manifest.json',
 }
@@ -18,6 +19,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en">
       <body>
         <AuthProvider>
+          <NotificationsInit />
           <AppShell>{children}</AppShell>
         </AuthProvider>
       </body>

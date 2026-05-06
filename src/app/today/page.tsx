@@ -4,11 +4,14 @@ import { useState, useEffect, useCallback } from 'react'
 import { getTodaysTasks } from '@/lib/db/tasks'
 import TaskCard from '@/components/board/TaskCard'
 import TaskDetail from '@/components/task/TaskDetail'
+import BriefingBanner from '@/components/today/BriefingBanner'
+import { useDailyBriefing } from '@/hooks/useDailyBriefing'
 import type { Task } from '@/types/task'
 
 export default function TodayPage() {
   const [tasks, setTasks] = useState<Task[]>([])
   const [selectedTask, setSelectedTask] = useState<Task | null>(null)
+  const briefing = useDailyBriefing()
 
   const refresh = useCallback(async () => {
     const t = await getTodaysTasks()
@@ -31,6 +34,8 @@ export default function TodayPage() {
         <h1 className="text-2xl font-bold text-white/90">Good day ☀️</h1>
         <p className="text-sm text-white/40 mt-1">{today}</p>
       </div>
+
+      {briefing && <BriefingBanner text={briefing} />}
 
       {tasks.length === 0 ? (
         <p className="text-sm text-white/30">No tasks due today — enjoy your day!</p>
