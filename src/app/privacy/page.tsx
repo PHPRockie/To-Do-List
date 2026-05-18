@@ -1,3 +1,9 @@
+import type { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'Privacy Policy — FlowTask',
+}
+
 export default function PrivacyPage() {
   return (
     <div className="p-6 max-w-lg space-y-6">
