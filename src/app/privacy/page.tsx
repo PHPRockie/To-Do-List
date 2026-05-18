@@ -29,11 +29,11 @@ export default function PrivacyPage() {
       </section>
 
       <section className="space-y-2">
-        <h2 className="text-base font-semibold text-white/70">Claude API key</h2>
+        <h2 className="text-base font-semibold text-white/70">AI features</h2>
         <p className="text-sm text-white/50 leading-relaxed">
-          Your Claude API key is stored on your device only. It is sent directly to
-          Anthropic's servers when you use AI features. We never store, log, or transmit
-          your API key to any server we control.
+          AI features are powered by Anthropic's Claude API. When you use AI features, the
+          content of your tasks is sent to Anthropic's servers to generate responses. No
+          other personal data is included. Anthropic's privacy policy applies to this data.
         </p>
       </section>
 

@@ -2,15 +2,18 @@
 
 import { useState, useEffect, useCallback } from 'react'
 import { getTodaysTasks } from '@/lib/db/tasks'
+import { getSetting } from '@/lib/db/settings'
 import TaskCard from '@/components/board/TaskCard'
 import TaskDetail from '@/components/task/TaskDetail'
 import BriefingBanner from '@/components/today/BriefingBanner'
 import { useDailyBriefing } from '@/hooks/useDailyBriefing'
+import { getGreeting } from '@/lib/utils/greeting'
 import type { Task } from '@/types/task'
 
 export default function TodayPage() {
   const [tasks, setTasks] = useState<Task[]>([])
   const [selectedTask, setSelectedTask] = useState<Task | null>(null)
+  const [displayName, setDisplayName] = useState('')
   const briefing = useDailyBriefing()
 
   const refresh = useCallback(async () => {
@@ -20,6 +23,7 @@ export default function TodayPage() {
 
   useEffect(() => {
     refresh()
+    getSetting('displayName').then(name => setDisplayName(name))
   }, [refresh])
 
   const today = new Date().toLocaleDateString('en-US', {
@@ -31,7 +35,9 @@ export default function TodayPage() {
   return (
     <div className="p-6 max-w-xl">
       <div className="mb-6">
-        <h1 className="text-2xl font-bold text-white/90">Good day ☀️</h1>
+        <h1 className="text-2xl font-bold text-white/90">
+          {getGreeting(displayName || undefined)} ☀️
+        </h1>
         <p className="text-sm text-white/40 mt-1">{today}</p>
       </div>
 

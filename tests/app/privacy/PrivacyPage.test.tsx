@@ -12,9 +12,9 @@ describe('PrivacyPage', () => {
     expect(screen.getByText(/IndexedDB/)).toBeInTheDocument()
   })
 
-  it('mentions the Claude API key stays on device', () => {
+  it('mentions AI is powered by Anthropic', () => {
     render(<PrivacyPage />)
-    expect(screen.getByText(/stored on your device only/)).toBeInTheDocument()
+    expect(screen.getByText(/Anthropic/)).toBeInTheDocument()
   })
 
   it('states no analytics or tracking', () => {
