@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import Anthropic from '@anthropic-ai/sdk'
 
 export const maxDuration = 30
+
 import {
   buildParseSystemPrompt,
   buildBreakdownSystemPrompt,
@@ -20,14 +21,15 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Invalid JSON body' }, { status: 400 })
   }
 
-  const { action, apiKey, input } = body
-
-  if (!apiKey || typeof apiKey !== 'string') {
-    return NextResponse.json({ error: 'API key required' }, { status: 400 })
-  }
+  const { action, input } = body
 
   if (!input || typeof input !== 'string') {
     return NextResponse.json({ error: 'Input required' }, { status: 400 })
+  }
+
+  const apiKey = process.env.ANTHROPIC_API_KEY
+  if (!apiKey) {
+    return NextResponse.json({ error: 'Server API key not configured' }, { status: 500 })
   }
 
   const client = new Anthropic({ apiKey })
@@ -94,11 +96,16 @@ export async function POST(req: NextRequest) {
     }
 
     if (action === 'briefing') {
+      const parsed = JSON.parse(input) as {
+        todayTasks: string[]
+        recentDone: string[]
+        profile?: { displayName?: string; city?: string; state?: string }
+      }
       const message = await client.messages.create({
         model: 'claude-haiku-4-5-20251001',
         max_tokens: 256,
-        system: buildBriefingSystemPrompt(),
-        messages: [{ role: 'user', content: input }],
+        system: buildBriefingSystemPrompt(parsed.profile ?? {}),
+        messages: [{ role: 'user', content: JSON.stringify({ todayTasks: parsed.todayTasks, recentDone: parsed.recentDone }) }],
       })
       const result = message.content[0].type === 'text' ? message.content[0].text : ''
       return NextResponse.json({ action, result })

@@ -83,15 +83,22 @@ Rules:
 - Be warm and motivating`
 }
 
-export function buildBriefingSystemPrompt(): string {
+export function buildBriefingSystemPrompt(profile: { displayName?: string; city?: string; state?: string } = {}): string {
+  const locationLine = [profile.city, profile.state].filter(Boolean).join(', ')
+  const contextLines = [
+    profile.displayName ? `User's name: ${profile.displayName}` : '',
+    locationLine ? `User's location: ${locationLine}` : '',
+  ].filter(Boolean).join('\n')
+
   return `You are a friendly daily productivity briefing assistant.
-Respond with plain text only — no JSON, no markdown, no bullet points, no lists.
+Respond with plain text only — no JSON, no markdown, no bullet points, no lists.${contextLines ? `\n\nUser context:\n${contextLines}` : ''}
 
 Rules:
 - 2–3 sentences maximum
 - Mention specific task names from the input when available
 - If tasks are due today, mention them by name
 - If tasks were recently completed, acknowledge them warmly
+- If user's name is provided, address them by name
 - If there are no tasks in either list, give a brief encouraging message
 - Be concise and warm`
 }

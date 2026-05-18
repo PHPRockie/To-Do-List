@@ -10,7 +10,6 @@ export interface ParseResult {
 
 export interface AIRequest {
   action: AIAction
-  apiKey: string
   input: string
 }
 
