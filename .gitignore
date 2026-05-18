@@ -49,3 +49,6 @@ public/workbox-*.js.map
 
 # Superpowers brainstorming
 .superpowers/
+
+# Screenshots added manually after deploy
+public/screenshots/*.png
