@@ -16,9 +16,6 @@ vi.mock('@/components/board/KanbanBoard', () => ({
 vi.mock('@/components/board/QuickAddBar', () => ({
   default: () => <div data-testid="quick-add-bar" />,
 }))
-vi.mock('@/components/board/ApiKeyBanner', () => ({
-  default: () => null,
-}))
 
 const makeMockTask = (id: string, title: string): Task => ({
   id,

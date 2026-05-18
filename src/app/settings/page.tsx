@@ -1,7 +1,8 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useAuth } from '@/context/AuthContext'
+import { getSetting, setSetting } from '@/lib/db/settings'
 import AuthModal from '@/components/auth/AuthModal'
 import GlassCard from '@/components/ui/GlassCard'
 
@@ -17,6 +18,26 @@ function formatLastSync(iso: string | null): string {
 export default function SettingsPage() {
   const { user, signOut, syncNow, syncStatus, lastSyncedAt, conflictCount } = useAuth()
   const [showAuth, setShowAuth] = useState(false)
+  const [displayName, setDisplayName] = useState('')
+  const [city, setCity] = useState('')
+  const [state, setState] = useState('')
+  const [profileSaved, setProfileSaved] = useState(false)
+
+  useEffect(() => {
+    getSetting('displayName').then(v => setDisplayName(v))
+    getSetting('city').then(v => setCity(v))
+    getSetting('state').then(v => setState(v))
+  }, [])
+
+  async function handleSaveProfile() {
+    await Promise.all([
+      setSetting('displayName', displayName),
+      setSetting('city', city),
+      setSetting('state', state),
+    ])
+    setProfileSaved(true)
+    setTimeout(() => setProfileSaved(false), 2000)
+  }
 
   const syncDotColor = {
     idle: 'bg-white/30',
@@ -36,6 +57,39 @@ export default function SettingsPage() {
           </p>
         </div>
       )}
+
+      <GlassCard className="p-5">
+        <p className="text-xs font-semibold text-white/40 uppercase tracking-wider mb-3">Profile</p>
+        <div className="space-y-2">
+          <input
+            type="text"
+            value={displayName}
+            onChange={e => setDisplayName(e.target.value)}
+            onBlur={handleSaveProfile}
+            placeholder="Your name"
+            className="w-full glass rounded-lg px-3 py-2 text-sm text-white placeholder-white/30 outline-none"
+          />
+          <div className="flex gap-2">
+            <input
+              type="text"
+              value={city}
+              onChange={e => setCity(e.target.value)}
+              onBlur={handleSaveProfile}
+              placeholder="City"
+              className="flex-1 glass rounded-lg px-3 py-2 text-sm text-white placeholder-white/30 outline-none"
+            />
+            <input
+              type="text"
+              value={state}
+              onChange={e => setState(e.target.value)}
+              onBlur={handleSaveProfile}
+              placeholder="State"
+              className="w-24 glass rounded-lg px-3 py-2 text-sm text-white placeholder-white/30 outline-none"
+            />
+          </div>
+          {profileSaved && <p className="text-xs text-green-400/70">✓ Saved</p>}
+        </div>
+      </GlassCard>
 
       <GlassCard className="p-5">
         <p className="text-xs font-semibold text-white/40 uppercase tracking-wider mb-3">Account</p>

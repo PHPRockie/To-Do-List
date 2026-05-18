@@ -5,7 +5,6 @@ import { getAllTasks } from '@/lib/db/tasks'
 import KanbanBoard from '@/components/board/KanbanBoard'
 import QuickAddBar from '@/components/board/QuickAddBar'
 import TaskDetail from '@/components/task/TaskDetail'
-import ApiKeyBanner from '@/components/board/ApiKeyBanner'
 import type { Task } from '@/types/task'
 
 export default function BoardPage() {
@@ -57,7 +56,6 @@ export default function BoardPage() {
           {filteredTasks.length} of {tasks.length} tasks
         </p>
       )}
-      <ApiKeyBanner />
       <QuickAddBar onTaskCreated={refresh} />
       <KanbanBoard tasks={filteredTasks} onTasksChange={refresh} onTaskClick={setSelectedTask} />
       {selectedTask && (
