@@ -62,7 +62,7 @@ export default function WeekSummary({ tasksCompleted, completionRate, completedT
       </p>
       {loading && <p className="text-sm text-white/40">Loading summary...</p>}
       {!loading && !summary && (
-        <p className="text-sm text-white/40">Set up your Claude API key to generate weekly summaries.</p>
+        <p className="text-sm text-white/40">Complete tasks this week to generate a summary.</p>
       )}
       {summary && <p className="text-sm text-white/75 leading-relaxed">{summary}</p>}
     </GlassCard>

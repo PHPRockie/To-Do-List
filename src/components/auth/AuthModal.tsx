@@ -108,7 +108,7 @@ export default function AuthModal({ onClose }: AuthModalProps) {
           >
             {loading ? 'Please wait...' : tab === 'signin' ? 'Sign In' : 'Sign Up'}
           </button>
-          <p className="text-xs text-white/25 text-center">Your API key stays on this device only</p>
+          <p className="text-xs text-white/25 text-center">Your tasks sync securely to your account</p>
         </form>
       </GlassCard>
     </div>

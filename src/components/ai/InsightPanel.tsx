@@ -13,7 +13,7 @@ export default function InsightPanel({ insight, loading, error }: InsightPanelPr
       {loading && <p className="text-sm text-white/40">Loading insight...</p>}
       {error && <p className="text-sm text-red-400/80">{error}</p>}
       {insight === undefined && !loading && !error && (
-        <p className="text-sm text-white/40">Set up your Claude API key to enable AI insights.</p>
+        <p className="text-sm text-white/40">AI insights will appear here.</p>
       )}
       {insight && (
         <p className="text-sm text-white/75 leading-relaxed">{insight}</p>

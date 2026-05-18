@@ -25,8 +25,8 @@ describe('SchedulePanel', () => {
     expect(screen.getByText('AI call failed')).toBeInTheDocument()
   })
 
-  it('renders no-key nudge when items is undefined', () => {
+  it('renders placeholder when items is undefined', () => {
     render(<SchedulePanel items={undefined} loading={false} error={null} onRegenerate={() => {}} />)
-    expect(screen.getByText(/API key/i)).toBeInTheDocument()
+    expect(screen.getByText(/AI schedule will appear here/i)).toBeInTheDocument()
   })
 })

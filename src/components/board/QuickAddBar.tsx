@@ -68,7 +68,7 @@ export default function QuickAddBar({ onTaskCreated }: QuickAddBarProps) {
             placeholder={
               aiEnabled
                 ? '✨ Add a task in plain English...'
-                : 'Add a task... (set Claude API key in settings to enable AI)'
+                : 'Add a task...'
             }
             disabled={loading}
             className="w-full glass rounded-xl px-4 py-3 text-sm text-white placeholder-white/30 outline-none focus:bg-white/10 transition-all"

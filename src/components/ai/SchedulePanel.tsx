@@ -22,7 +22,7 @@ export default function SchedulePanel({ items, loading, error, onRegenerate }: S
       {loading && <p className="text-sm text-white/40">Loading schedule...</p>}
       {error && <p className="text-sm text-red-400/80">{error}</p>}
       {items === undefined && !loading && !error && (
-        <p className="text-sm text-white/40">Set up your Claude API key to enable AI scheduling.</p>
+        <p className="text-sm text-white/40">AI schedule will appear here.</p>
       )}
       {items && items.length === 0 && (
         <p className="text-sm text-white/40">No open tasks to schedule — great work!</p>

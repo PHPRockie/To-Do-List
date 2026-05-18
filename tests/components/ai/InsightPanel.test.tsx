@@ -12,8 +12,8 @@ describe('InsightPanel', () => {
     expect(screen.getByText(/loading/i)).toBeInTheDocument()
   })
 
-  it('renders no-key nudge when insight is undefined', () => {
+  it('renders placeholder when insight is undefined', () => {
     render(<InsightPanel insight={undefined} loading={false} error={null} />)
-    expect(screen.getByText(/API key/i)).toBeInTheDocument()
+    expect(screen.getByText(/AI insights will appear here/i)).toBeInTheDocument()
   })
 })
