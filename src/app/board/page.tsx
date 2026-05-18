@@ -41,7 +41,7 @@ export default function BoardPage() {
             placeholder="Search tasks..."
             className="glass rounded-lg pl-8 pr-8 py-1.5 text-sm text-white placeholder-white/30 outline-none w-44"
           />
-          {query && (
+          {query.trim() && (
             <button
               onClick={() => setQuery('')}
               className="absolute right-2 text-white/30 hover:text-white/60 text-base leading-none"
