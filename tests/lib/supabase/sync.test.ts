@@ -1,4 +1,4 @@
-import { syncTasks, syncAll } from '@/lib/supabase/sync'
+import { syncTasks, syncAll, syncSettings } from '@/lib/supabase/sync'
 import { getAllTasks, createTask } from '@/lib/db/tasks'
 import { getSetting } from '@/lib/db/settings'
 import { resetDB } from '@/lib/db'
@@ -87,5 +87,22 @@ describe('syncAll', () => {
     await syncAll('user-1')
     const lastSyncedAt = await getSetting('lastSyncedAt')
     expect(lastSyncedAt).toBeTruthy()
+  })
+})
+
+describe('syncSettings', () => {
+  it('includes displayName, city, and state in synced data', async () => {
+    await syncSettings('user-1')
+
+    expect(mockUpsert).toHaveBeenCalledWith(
+      expect.objectContaining({
+        user_id: 'user-1',
+        data: expect.objectContaining({
+          displayName: '',
+          city: '',
+          state: '',
+        }),
+      })
+    )
   })
 })

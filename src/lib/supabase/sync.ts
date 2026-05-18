@@ -1,6 +1,6 @@
 import { supabase } from './client'
 import { getAllTasks, createTask } from '@/lib/db/tasks'
-import { setSetting } from '@/lib/db/settings'
+import { getSetting, setSetting } from '@/lib/db/settings'
 import type { Task } from '@/types/task'
 
 export interface SyncResult {
@@ -46,13 +46,15 @@ export async function syncTasks(userId: string): Promise<Omit<SyncResult, 'pushe
 }
 
 export async function syncSettings(userId: string): Promise<void> {
-  const { getSetting } = await import('@/lib/db/settings')
   const settingsToSync = {
     theme: await getSetting('theme'),
     focusDuration: await getSetting('focusDuration'),
     breakDuration: await getSetting('breakDuration'),
     streak: await getSetting('streak'),
     lastActiveDate: await getSetting('lastActiveDate'),
+    displayName: await getSetting('displayName'),
+    city: await getSetting('city'),
+    state: await getSetting('state'),
   }
   const { error } = await supabase.from('user_settings').upsert({
     user_id: userId,
