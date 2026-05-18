@@ -17,9 +17,9 @@ describe('settings', () => {
   })
 
   it('persists a setting and reads it back', async () => {
-    await setSetting('claudeApiKey', 'sk-test-123')
-    const val = await getSetting('claudeApiKey')
-    expect(val).toBe('sk-test-123')
+    await setSetting('displayName', 'José')
+    const val = await getSetting('displayName')
+    expect(val).toBe('José')
   })
 
   it('overwrites an existing setting', async () => {
