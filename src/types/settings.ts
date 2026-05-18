@@ -1,5 +1,4 @@
 export interface Settings {
-  claudeApiKey?: string
   theme: 'dark'
   focusDuration: number
   breakDuration: number
@@ -10,4 +9,7 @@ export interface Settings {
   notificationsEnabled: boolean
   lastBriefingDate: string
   lastBriefingText: string
+  displayName: string
+  city: string
+  state: string
 }

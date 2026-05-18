@@ -1,8 +1,7 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { useAuth } from '@/context/AuthContext'
-import { getSetting, setSetting } from '@/lib/db/settings'
 import AuthModal from '@/components/auth/AuthModal'
 import GlassCard from '@/components/ui/GlassCard'
 
@@ -18,18 +17,6 @@ function formatLastSync(iso: string | null): string {
 export default function SettingsPage() {
   const { user, signOut, syncNow, syncStatus, lastSyncedAt, conflictCount } = useAuth()
   const [showAuth, setShowAuth] = useState(false)
-  const [apiKey, setApiKey] = useState('')
-  const [keySaved, setKeySaved] = useState(false)
-
-  useEffect(() => {
-    getSetting('claudeApiKey').then(k => setApiKey(k ?? ''))
-  }, [])
-
-  async function handleSaveKey() {
-    await setSetting('claudeApiKey', apiKey || undefined)
-    setKeySaved(true)
-    setTimeout(() => setKeySaved(false), 2000)
-  }
 
   const syncDotColor = {
     idle: 'bg-white/30',
@@ -96,26 +83,6 @@ export default function SettingsPage() {
           </div>
         </GlassCard>
       )}
-
-      <GlassCard className="p-5">
-        <p className="text-xs font-semibold text-white/40 uppercase tracking-wider mb-3">Claude API Key</p>
-        <div className="flex gap-2">
-          <input
-            type="password"
-            value={apiKey}
-            onChange={e => setApiKey(e.target.value)}
-            placeholder="sk-ant-..."
-            className="flex-1 glass rounded-lg px-3 py-2 text-sm text-white placeholder-white/30 outline-none"
-          />
-          <button
-            onClick={handleSaveKey}
-            className="glass glass-hover px-3 py-2 rounded-lg text-xs text-white/60"
-          >
-            {keySaved ? '✓ Saved' : 'Save'}
-          </button>
-        </div>
-        <p className="text-xs text-white/25 mt-2">Stored locally only — never uploaded</p>
-      </GlassCard>
 
       {showAuth && <AuthModal onClose={() => setShowAuth(false)} />}
     </div>

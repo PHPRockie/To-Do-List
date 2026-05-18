@@ -12,6 +12,9 @@ const DEFAULTS: Settings = {
   notificationsEnabled: false,
   lastBriefingDate: '',
   lastBriefingText: '',
+  displayName: '',
+  city: '',
+  state: '',
 }
 
 export async function getSetting<K extends keyof Settings>(key: K): Promise<Settings[K]> {

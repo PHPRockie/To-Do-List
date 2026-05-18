@@ -10,9 +10,6 @@ export function useDailyBriefing(): string | null {
 
   useEffect(() => {
     async function load() {
-      const apiKey = await getSetting('claudeApiKey')
-      if (!apiKey) return
-
       const today = new Date().toISOString().split('T')[0]
       const lastDate = await getSetting('lastBriefingDate')
       const lastText = await getSetting('lastBriefingText')
@@ -32,7 +29,11 @@ export function useDailyBriefing(): string | null {
           .filter(t => t.completedAt && t.completedAt > cutoff)
           .map(t => t.title)
 
-        const text = await callBriefingAI(todayTasks, recentDone)
+        const displayName = (await getSetting('displayName')) || undefined
+        const city = (await getSetting('city')) || undefined
+        const state = (await getSetting('state')) || undefined
+
+        const text = await callBriefingAI(todayTasks, recentDone, { displayName, city, state })
 
         await setSetting('lastBriefingDate', today)
         await setSetting('lastBriefingText', text)

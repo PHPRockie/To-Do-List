@@ -20,9 +20,11 @@ const TODAY = new Date().toISOString().split('T')[0]
 
 function mockSettings(overrides: Record<string, unknown> = {}) {
   const defaults: Record<string, unknown> = {
-    claudeApiKey: 'sk-ant-test',
     lastBriefingDate: '',
     lastBriefingText: '',
+    displayName: '',
+    city: '',
+    state: '',
     ...overrides,
   }
   vi.mocked(getSetting).mockImplementation((key) => Promise.resolve(defaults[key] as never))
@@ -48,6 +50,25 @@ describe('useDailyBriefing', () => {
     expect(setSetting).toHaveBeenCalledWith('lastBriefingText', 'You have 2 tasks today. Keep it up!')
   })
 
+  it('passes profile fields to callBriefingAI when set', async () => {
+    mockSettings({
+      lastBriefingDate: '',
+      displayName: 'José',
+      city: 'Austin',
+      state: 'TX',
+    })
+
+    const { result } = renderHook(() => useDailyBriefing())
+
+    await waitFor(() => expect(result.current).not.toBeNull())
+
+    expect(callBriefingAI).toHaveBeenCalledWith(
+      expect.any(Array),
+      expect.any(Array),
+      { displayName: 'José', city: 'Austin', state: 'TX' }
+    )
+  })
+
   it('returns cached text without calling AI if lastBriefingDate is today', async () => {
     mockSettings({
       lastBriefingDate: TODAY,
@@ -60,17 +81,6 @@ describe('useDailyBriefing', () => {
 
     expect(callBriefingAI).not.toHaveBeenCalled()
     expect(result.current).toBe('Cached briefing from earlier')
-  })
-
-  it('returns null when no API key is set', async () => {
-    mockSettings({ claudeApiKey: undefined, lastBriefingDate: '' })
-
-    const { result } = renderHook(() => useDailyBriefing())
-
-    await waitFor(() => expect(getSetting).toHaveBeenCalled())
-
-    expect(callBriefingAI).not.toHaveBeenCalled()
-    expect(result.current).toBeNull()
   })
 
   it('returns null when AI call throws', async () => {
