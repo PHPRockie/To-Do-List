@@ -31,8 +31,11 @@ export function useNotifications() {
         if (!task.dueDate || notifiedIds.current.has(task.id)) continue
         try {
           const due = new Date(task.dueDate).getTime()
-          if (due >= now && due < now + 60_000) {
-            new Notification(task.title, { body: 'Due now', icon: '/icons/icon-192.png' })
+          const offset = Math.max(0, task.reminderOffset ?? 0)
+          const fireTime = due - offset * 60_000
+          if (fireTime >= now && fireTime < now + 60_000) {
+            const body = offset > 0 ? `Due in ${offset} minutes` : 'Due now'
+            new Notification(task.title, { body, icon: '/icons/icon-192.png' })
             notifiedIds.current.add(task.id)
           }
         } catch {

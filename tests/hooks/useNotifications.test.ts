@@ -48,6 +48,19 @@ const makeTask = (id: string, dueDate: string): Task => ({
   updatedAt: '',
 })
 
+const makeTaskWithOffset = (id: string, dueDate: string, reminderOffset: number): Task => ({
+  id,
+  title: `Task ${id}`,
+  dueDate,
+  reminderOffset,
+  status: 'todo',
+  priority: 'medium',
+  tags: [],
+  subtasks: [],
+  createdAt: '',
+  updatedAt: '',
+})
+
 beforeEach(() => {
   vi.clearAllMocks()
   vi.useFakeTimers()
@@ -113,6 +126,35 @@ describe('useNotifications', () => {
     const now = Date.now()
     vi.setSystemTime(now)
     vi.mocked(getAllTasks).mockResolvedValue([makeTask('t1', new Date(now + 30_000).toISOString())])
+
+    renderHook(() => useNotifications())
+    await act(async () => {})
+
+    expect(MockNotification).not.toHaveBeenCalled()
+  })
+
+  it('fires at reminderOffset minutes before due time with correct body', async () => {
+    const now = Date.now()
+    vi.setSystemTime(now)
+    // due in 30 min 30 sec, 30-min offset → fire time is 30 sec from now (within current tick window)
+    const dueDate = new Date(now + 30 * 60_000 + 30_000).toISOString()
+    vi.mocked(getAllTasks).mockResolvedValue([makeTaskWithOffset('t1', dueDate, 30)])
+
+    renderHook(() => useNotifications())
+    await act(async () => {})
+
+    expect(MockNotification).toHaveBeenCalledWith('Task t1', {
+      body: 'Due in 30 minutes',
+      icon: '/icons/icon-192.png',
+    })
+  })
+
+  it('does not fire when the reminder window has not arrived', async () => {
+    const now = Date.now()
+    vi.setSystemTime(now)
+    // due in 90 min, 30-min offset → fire time is 60 min from now (outside current tick window)
+    const dueDate = new Date(now + 90 * 60_000).toISOString()
+    vi.mocked(getAllTasks).mockResolvedValue([makeTaskWithOffset('t1', dueDate, 30)])
 
     renderHook(() => useNotifications())
     await act(async () => {})
