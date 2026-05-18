@@ -2,6 +2,7 @@ import { getDB } from './index'
 import type { Settings } from '@/types/settings'
 
 const DEFAULTS: Settings = {
+  claudeApiKey: undefined,
   theme: 'dark',
   focusDuration: 25,
   breakDuration: 5,
