@@ -8,6 +8,7 @@ export async function hasApiKey(): Promise<boolean> {
   return Boolean(key)
 }
 
+// Returns undefined in web mode — JSON.stringify omits undefined fields, so no apiKey reaches the server
 async function getApiKey(): Promise<string | undefined> {
   if (!requireUserKey) return undefined
   const key = await getSetting('claudeApiKey')
