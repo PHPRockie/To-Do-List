@@ -21,13 +21,13 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Invalid JSON body' }, { status: 400 })
   }
 
-  const { action, input } = body
+  const { action, input, apiKey: bodyApiKey } = body
 
   if (!input || typeof input !== 'string') {
     return NextResponse.json({ error: 'Input required' }, { status: 400 })
   }
 
-  const apiKey = process.env.ANTHROPIC_API_KEY
+  const apiKey = bodyApiKey ?? process.env.ANTHROPIC_API_KEY
   if (!apiKey) {
     return NextResponse.json({ error: 'Server API key not configured' }, { status: 500 })
   }
