@@ -10,7 +10,7 @@ export default function ApiKeyBanner() {
   const [dismissed, setDismissed] = useState(false)
 
   useEffect(() => {
-    hasApiKey().then(has => setShow(!has))
+    hasApiKey().then(has => setShow(!has)).catch(() => setShow(true))
   }, [])
 
   if (!show || dismissed) return null
