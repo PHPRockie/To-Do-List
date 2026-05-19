@@ -5,6 +5,7 @@ import { useAuth } from '@/context/AuthContext'
 import { getSetting, setSetting } from '@/lib/db/settings'
 import AuthModal from '@/components/auth/AuthModal'
 import GlassCard from '@/components/ui/GlassCard'
+import { requireUserKey } from '@/lib/config'
 
 function formatLastSync(iso: string | null): string {
   if (!iso) return 'Never'
@@ -22,11 +23,16 @@ export default function SettingsPage() {
   const [city, setCity] = useState('')
   const [state, setState] = useState('')
   const [profileSaved, setProfileSaved] = useState(false)
+  const [apiKey, setApiKey] = useState('')
+  const [keySaved, setKeySaved] = useState(false)
 
   useEffect(() => {
     getSetting('displayName').then(v => setDisplayName(v))
     getSetting('city').then(v => setCity(v))
     getSetting('state').then(v => setState(v))
+    if (requireUserKey) {
+      getSetting('claudeApiKey').then(k => setApiKey(k ?? ''))
+    }
   }, [])
 
   async function handleSaveProfile() {
@@ -37,6 +43,12 @@ export default function SettingsPage() {
     ])
     setProfileSaved(true)
     setTimeout(() => setProfileSaved(false), 2000)
+  }
+
+  async function handleSaveKey() {
+    await setSetting('claudeApiKey', apiKey || undefined)
+    setKeySaved(true)
+    setTimeout(() => setKeySaved(false), 2000)
   }
 
   const syncDotColor = {
@@ -90,6 +102,28 @@ export default function SettingsPage() {
           {profileSaved && <p className="text-xs text-green-400/70">✓ Saved</p>}
         </div>
       </GlassCard>
+
+      {requireUserKey && (
+        <GlassCard className="p-5">
+          <p className="text-xs font-semibold text-white/40 uppercase tracking-wider mb-3">Claude API Key</p>
+          <div className="flex gap-2">
+            <input
+              type="password"
+              value={apiKey}
+              onChange={e => setApiKey(e.target.value)}
+              placeholder="sk-ant-..."
+              className="flex-1 glass rounded-lg px-3 py-2 text-sm text-white placeholder-white/30 outline-none"
+            />
+            <button
+              onClick={handleSaveKey}
+              className="glass glass-hover px-3 py-2 rounded-lg text-xs text-white/60"
+            >
+              {keySaved ? '✓ Saved' : 'Save'}
+            </button>
+          </div>
+          <p className="text-xs text-white/25 mt-2">Stored locally only — never uploaded</p>
+        </GlassCard>
+      )}
 
       <GlassCard className="p-5">
         <p className="text-xs font-semibold text-white/40 uppercase tracking-wider mb-3">Account</p>
