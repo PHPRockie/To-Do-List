@@ -20,6 +20,7 @@ export default function FocusTimer() {
   const [running, setRunning] = useState(false)
   const [startedAt, setStartedAt] = useState<string | null>(null)
   const [todaySessions, setTodaySessions] = useState(0)
+  const [customInput, setCustomInput] = useState('')
 
   const refreshSessions = useCallback(async () => {
     const sessions = await getTodaysCompletedSessions()
@@ -75,6 +76,14 @@ export default function FocusTimer() {
     setTimeLeft(mins * 60)
   }
 
+  function handleCustomApply() {
+    const mins = parseInt(customInput, 10)
+    setCustomInput('')
+    if (!isNaN(mins) && mins >= 1 && mins <= 180) {
+      handleDurationChange(mins)
+    }
+  }
+
   const progress = timeLeft / (duration * 60)
   const strokeDashoffset = CIRCUMFERENCE * (1 - progress)
 
@@ -123,6 +132,23 @@ export default function FocusTimer() {
             {mins}m
           </button>
         ))}
+      </div>
+
+      {/* Custom time input */}
+      <div className="flex items-center gap-2">
+        <input
+          type="number"
+          min={1}
+          max={180}
+          value={customInput}
+          onChange={e => setCustomInput(e.target.value)}
+          onBlur={handleCustomApply}
+          onKeyDown={e => e.key === 'Enter' && handleCustomApply()}
+          placeholder="Custom"
+          disabled={running}
+          className="w-28 glass rounded-lg px-3 py-1.5 text-sm text-white placeholder-white/30 outline-none text-center disabled:opacity-40 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+        />
+        <span className="text-sm text-white/40">min</span>
       </div>
 
       {/* Controls */}
