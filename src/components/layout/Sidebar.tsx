@@ -17,7 +17,9 @@ export default function Sidebar() {
 
   return (
     <nav className="flex flex-col items-center gap-2 py-4 px-2 glass border-r border-white/10 min-h-screen w-16">
-      <div className="w-8 h-8 rounded-lg gradient-bg mb-4" />
+      <div className="w-8 h-8 rounded-lg gradient-bg mb-4 flex items-center justify-center">
+        <span className="text-white font-bold text-sm leading-none">F</span>
+      </div>
 
       {navItems.map(({ href, icon, label }) => {
         const active = pathname === href
